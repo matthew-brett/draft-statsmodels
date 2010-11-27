@@ -64,7 +64,7 @@ LICENSE = 'BSD License'
 DOWNLOAD_URL = ''
 
 MAJ = 0
-MIN = 2
+MIN = 3
 REV = 0
 DEV = False #True
 QUALIFIER = '' #'b2dev'
