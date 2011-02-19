@@ -5,7 +5,14 @@ It has been tested on Ubuntu Jaunty and works there as well.  If it does not
 work for you and returns an error about finding sphinx-build then you need
 to edit the first lines that define `sphinx_build` to point to where
 sphinx-build is installed.  On linux you can find out by typing
-`which sphinx-build` at the command line.
+`which sphinx-build` at the command line. Optionally, you can pass an argument
+--sphinx that tells the script where to find the sphinx-build. Ie.,
+
+python make.py html --sphinx_dir=/home/user/bin/
+
+or
+
+python make.py html --sphinx_dir=C:\Python26\Scripts
 
 To build the docs you must have all optional dependencies for statsmodels
 installed. See the installation instructions for a list of these.
@@ -28,10 +35,18 @@ import sys
 # checks for sphinx-build binary these will find it if it is installed
 # in sys.prefix+'/local/bin/' or
 # in sys.predix+'/Scripts/'
-if os.path.isfile(os.path.join(sys.prefix, 'Scripts', 'sphinx-build.exe')):
-    sphinx_build = os.path.join(sys.prefix, 'Scripts', 'sphinx-build.exe')
-elif os.path.isfile(os.path.join(sys.prefix, 'local', 'bin', 'sphinx-build')):
-    sphinx_build = os.path.join(sys.prefix, 'local', 'bin', 'sphinx-build')
+if 'sphinx_dir' in sys.argv[-1]:
+    sphinx_dir = sys.argv[-1].split('=')[1]
+    if os.path.isfile(os.path.join(sphinx_dir, 'sphinx-build.exe')):
+        sphinx_build = os.path.join(sphinx_dir, 'sphinx-build.exe')
+    elif os.path.isfile(os.path.join(sphinx_dir, 'sphinx-build')):
+        sphinx_build = os.path.join(sphinx_dir, 'sphinx-build')
+else:
+    if os.path.isfile(os.path.join(sys.prefix, 'Scripts', 'sphinx-build.exe')):
+        sphinx_build = os.path.join(sys.prefix, 'Scripts', 'sphinx-build.exe')
+    elif os.path.isfile(os.path.join(sys.prefix, 'local', 'bin',
+            'sphinx-build')):
+        sphinx_build = os.path.join(sys.prefix, 'local', 'bin', 'sphinx-build')
 
 def check_build():
     build_dirs = [
@@ -99,11 +114,11 @@ funcd = {'html':html,
          'all':all,
          }
 
-if len(sys.argv)>1:
+if len(sys.argv)>1 and 'sphinx_dir' not in sys.argv[2]:
     for arg in sys.argv[1:]:
         func = funcd.get(arg)
         if func is None:
-            raise SystemExit('Do not know how to handle %s; valid args are'%(
+            raise SystemExit('Do not know how to handle %s; valid args are %s'%(
                     arg, funcd.keys()))
         func()
 else:
