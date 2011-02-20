@@ -54,7 +54,7 @@ Families
 
 The distribution families currently implemented are
 
-.. currentmodule:: scikits.statsmodels.family.family
+.. currentmodule:: scikits.statsmodels.families.family
 
 .. autosummary::
    :toctree: generated/
@@ -77,7 +77,7 @@ available link functions can be obtained by ::
 
 >>> ssm.family.family.<familyname>.available ?
 
-.. currentmodule:: scikits.statsmodels.family.links
+.. currentmodule:: scikits.statsmodels.families.links
 
 .. autosummary::
    :toctree: generated/
